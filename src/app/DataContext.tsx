@@ -61,7 +61,16 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         for (const file of dataFiles) {
           try {
             console.log(`Loading ${file.name} from Netlify...`);
-            const response = await fetch(file.url);
+            
+            // Add timeout for large files
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            
+            const response = await fetch(file.url, {
+              signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
             
             if (response.ok) {
               const jsonData = await response.json();
@@ -71,8 +80,11 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
             } else {
               console.warn(`⚠️ Failed to load ${file.name}: HTTP ${response.status}`);
             }
-          } catch (err) {
+          } catch (err: any) {
             console.warn(`⚠️ Error loading ${file.name}:`, err);
+            if (err.name === 'AbortError') {
+              console.warn(`⏰ Timeout loading ${file.name} - file too large`);
+            }
           }
         }
         
