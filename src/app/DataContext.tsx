@@ -60,11 +60,11 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         // Load all three data files from Netlify
         for (const file of dataFiles) {
           try {
-            console.log(`Loading ${file.name} from Netlify...`);
+            console.log(`Loading ${file.name} from Netlify... (this may take up to 60 seconds for large files)`);
             
             // Add timeout for large files
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
             
             const response = await fetch(file.url, {
               signal: controller.signal
