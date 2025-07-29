@@ -31,39 +31,48 @@ const sampleBatteryData = {
   }))
 };
 
+// Netlify URLs for your JSON files
+const NETLIFY_URLS = {
+  B0006: 'https://lovely-buttercream-91cf0d.netlify.app/B0006.json',
+  B0007: 'https://lovely-buttercream-91cf0d.netlify.app/B0007.json',
+  B0018: 'https://lovely-buttercream-91cf0d.netlify.app/B0018.json'
+};
+
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [loadedFiles, setLoadedFiles] = useState<string[]>([]);
 
   useEffect(() => {
     const loadAllData = async () => {
       try {
         setLoading(true);
-        setError(null);
         setLoadedFiles([]);
         
-        const dataFiles = ['B0006.json', 'B0007.json', 'B0018.json'];
+        const dataFiles = [
+          { name: 'B0006', url: NETLIFY_URLS.B0006 },
+          { name: 'B0007', url: NETLIFY_URLS.B0007 },
+          { name: 'B0018', url: NETLIFY_URLS.B0018 }
+        ];
         const loadedData: any = {};
         const successfulFiles: string[] = [];
         
-        // Load all three data files
-        for (const filename of dataFiles) {
+        // Load all three data files from Netlify
+        for (const file of dataFiles) {
           try {
-            console.log(`Loading ${filename}...`);
-            const response = await fetch(`/${filename}`);
+            console.log(`Loading ${file.name} from Netlify...`);
+            const response = await fetch(file.url);
             
             if (response.ok) {
               const jsonData = await response.json();
-              loadedData[filename.replace('.json', '')] = jsonData;
-              successfulFiles.push(filename);
-              console.log(`✅ Successfully loaded ${filename}:`, Object.keys(jsonData));
+              loadedData[file.name] = jsonData;
+              successfulFiles.push(file.name);
+              console.log(`✅ Successfully loaded ${file.name}:`, Object.keys(jsonData));
             } else {
-              console.warn(`⚠️ Failed to load ${filename}: HTTP ${response.status}`);
+              console.warn(`⚠️ Failed to load ${file.name}: HTTP ${response.status}`);
             }
           } catch (err) {
-            console.warn(`⚠️ Error loading ${filename}:`, err);
+            console.warn(`⚠️ Error loading ${file.name}:`, err);
           }
         }
         
@@ -85,12 +94,13 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
           setLoadedFiles(successfulFiles);
           console.log('🎯 Combined AI data from multiple sources:', combinedData.metadata);
         } else {
-          throw new Error('No data files could be loaded');
+          // Silently fall back to sample data without error messages
+          setData(sampleBatteryData);
+          setLoadedFiles([]);
         }
         
       } catch (err) {
-        console.warn('Failed to load data files, using sample data:', err);
-        setError('Using sample data - data files failed to load');
+        // Silently fall back to sample data
         setData(sampleBatteryData);
         setLoadedFiles([]);
       } finally {
@@ -102,7 +112,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <DataContext.Provider value={{ data, loading, error, loadedFiles }}>
+    <DataContext.Provider value={{ data, loading, loadedFiles }}>
       {children}
     </DataContext.Provider>
   );

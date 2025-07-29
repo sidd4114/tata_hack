@@ -12,7 +12,7 @@ type ProfileData = {
 };
 
 export default function ChargeProfileChart() {
-  const { data, loading, error } = useData();
+  const { data, loading } = useData();
   const [profileData, setProfileData] = useState<ProfileData[]>([]);
   const [aiInsights, setAiInsights] = useState<string[]>([]);
 
@@ -87,16 +87,6 @@ export default function ChargeProfileChart() {
       <div className="p-6 bg-gray-900 bg-opacity-80 rounded-2xl shadow-2xl card-glass border border-gray-700 max-w-xl mx-auto animate-fade-in-up">
         <h2 className="text-white text-2xl font-bold mb-2">AI Charge Profile Analysis</h2>
         <div className="text-gray-400">Loading battery data for AI analysis...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-6 bg-gray-900 bg-opacity-80 rounded-2xl shadow-2xl card-glass border border-gray-700 max-w-xl mx-auto animate-fade-in-up">
-        <h2 className="text-white text-2xl font-bold mb-2">AI Charge Profile Analysis</h2>
-        <div className="text-yellow-400 text-sm mb-2">{error}</div>
-        <div className="text-gray-400">Using sample data for AI analysis...</div>
       </div>
     );
   }

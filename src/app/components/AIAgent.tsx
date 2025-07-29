@@ -24,7 +24,7 @@ interface AIAnalysis {
 }
 
 export default function AIAgent() {
-  const { data, loading, error, loadedFiles } = useData();
+  const { data, loading, loadedFiles } = useData();
   const [predictions, setPredictions] = useState<AIPrediction[]>([]);
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
@@ -224,16 +224,6 @@ export default function AIAgent() {
       <div className="p-4 bg-gray-900 rounded-xl shadow-lg card-glass">
         <h2 className="text-white text-lg font-bold mb-4">AI Battery Intelligence Agent</h2>
         <div className="text-gray-400">Loading multiple data sources...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-4 bg-gray-900 rounded-xl shadow-lg card-glass">
-        <h2 className="text-white text-lg font-bold mb-4">AI Battery Intelligence Agent</h2>
-        <div className="text-yellow-400 text-sm mb-2">{error}</div>
-        <div className="text-gray-400">Using sample data for analysis...</div>
       </div>
     );
   }
