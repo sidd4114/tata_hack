@@ -1,103 +1,111 @@
-import Image from "next/image";
+"use client";
+import React, { useState } from "react";
+import AlertCard from "./components/AlertCard";
+import AlertModal from "./components/AlertModal";
+import CellMap from "./components/CellMap";
+import ChargingScheduler from "./components/ChargingScheduler";
+import HeatmapChart from "./components/HeatmapChart";
+import ChargeProfileChart from "./components/ChargeProfileChart";
+import BatteryPassport from "./components/BatteryPassport";
+import AIStatusIndicator from "./components/AIStatusIndicator";
+import AIAgent from "./components/AIAgent";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalDetails, setModalDetails] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Example: handle alert click (replace with real data from AlertCard if needed)
+  const handleAlertClick = () => {
+    setModalDetails("Cell 4 degraded due to 15 fast-charges in last 30 cycles.\nAI detected abnormal impedance pattern.");
+    setModalOpen(true);
+  };
+
+  return (
+    <main className="min-h-screen bg-black p-8">
+      <AIStatusIndicator />
+      <h1 className="text-4xl font-bold text-white mb-2 animate-fade-in-up">Battery Intelligence Center</h1>
+      <div className="mb-8 text-sm text-[#60a5fa] font-mono tracking-wide animate-fade-in-up">
+        Battery Type: <span className="font-semibold text-[#f3f4f6]">Li-ion (NMC)</span>
+      </div>
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div onClick={handleAlertClick} className="cursor-pointer">
+          <AlertCard />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <AIAgent />
+        <CellMap />
+        <ChargingScheduler />
+        <HeatmapChart />
+        <ChargeProfileChart />
+        <BatteryPassport />
+      </section>
+      
+      {/* Car Information Section */}
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white mb-6 animate-fade-in-up">About Your Car</h2>
+        <div className="bg-gray-900 rounded-xl shadow-lg card-glass p-6">
+          <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+            {/* Car Image */}
+            <div className="w-96 h-72 rounded-lg overflow-hidden">
+              <img 
+                src="/punchev.png" 
+                alt="Tata Curvv EV" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            
+            {/* Car Details */}
+            <div className="flex-1">
+              <div className="mb-4">
+                <h3 className="text-white text-xl font-bold mb-2">Punch EV</h3>
+                <p className="text-gray-400 text-lg">Electric Compact SUV</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Battery Capacity:</span>
+                    <span className="text-white font-semibold">35-38.3 kWh</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Range:</span>
+                    <span className="text-white font-semibold">315-421 km (ARAI)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Max Power:</span>
+                    <span className="text-white font-semibold">82-122 hp</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">0-100 km/h:</span>
+                    <span className="text-white font-semibold">~9.5s</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Top Speed:</span>
+                    <span className="text-white font-semibold">140 km/h</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Body Style:</span>
+                    <span className="text-white font-semibold">Compact SUV</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-gray-700">
+                <p className="text-gray-300 text-sm">
+                  Your Punch EV is Tata's first all-electric compact SUV, built on the advanced Gen 2 EV architecture. It features a high ground clearance, practical urban design, and a robust battery management system for optimal performance and range. The Punch EV is designed for city agility and long-range comfort, making it a perfect fit for modern electric mobility.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+
+
+      
+      <AlertModal open={modalOpen} onOpenChange={setModalOpen} details={modalDetails} />
+    </main>
   );
 }
