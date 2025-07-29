@@ -48,8 +48,8 @@ export default function Home() {
             <div className="w-96 h-72 rounded-lg overflow-hidden">
               <img 
                 src="/punchev.png" 
-                alt="Tata Curvv EV" 
-                className="w-full h-full object-cover"
+                alt="Tata Punch EV" 
+                className="w-full h-full object-contain"
               />
             </div>
             
